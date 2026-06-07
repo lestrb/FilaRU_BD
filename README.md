@@ -60,3 +60,34 @@ As variaveis usadas no setup automatico (primeira subida) estao no `.env`:
 - `DOCKER_INFLUXDB_INIT_ORG`
 - `DOCKER_INFLUXDB_INIT_BUCKET`
 - `DOCKER_INFLUXDB_INIT_ADMIN_TOKEN`
+
+## Executando os scripts Python (popular e consultar)
+
+1. Instale as dependências Python (recomendado em virtualenv):
+
+```bash
+pip install -r requirements.txt
+```
+
+2. Suba o InfluxDB com Docker (primeira vez: usa as variáveis do `.env`):
+
+```bash
+docker compose up -d
+```
+
+3. Popule o banco com dados simulados (executa `seed_fila_ru.py`):
+
+```bash
+python seed_fila_ru.py
+```
+
+4. Rode as consultas de exemplo (executa `consultas.py`):
+
+```bash
+python consultas.py
+```
+
+Observações:
+- Os scripts leem as variáveis de conexão a partir do arquivo `.env` (token, org, bucket e URL).
+- Se o InfluxDB demorar a subir, os scripts fazem tentativas automáticas antes de falhar.
+

@@ -1,13 +1,36 @@
+
+import os
+import time
+from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient
 
-# Configurações de Conexão com o InfluxDB (Docker local por enquanto) -- AJUSTAR QUANDO FIZER O DOCKER
-token = "TOKEN_DO_INFLUXDB"
-org = "ufpe"
-bucket = "ru_ufpe"
-url = "http://localhost:8086"
+load_dotenv()
 
-# Inicializa o cliente e a API de consulta (Query API)
-client = InfluxDBClient(url=url, token=token, org=org)
+# Configurações via .env
+token = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN", "TOKEN_DO_INFLUXDB")
+org = os.getenv("DOCKER_INFLUXDB_INIT_ORG", "ufpe")
+bucket = os.getenv("DOCKER_INFLUXDB_INIT_BUCKET", "ru_ufpe")
+url = os.getenv("INFLUXDB_URL", "http://localhost:8086")
+
+# Inicializa o cliente com retry/cheque de saúde
+max_retries = 10
+for attempt in range(1, max_retries + 1):
+  try:
+    client = InfluxDBClient(url=url, token=token, org=org, timeout=30000)
+    health = client.health()
+    status = None
+    if isinstance(health, dict):
+      status = health.get("status")
+    else:
+      status = getattr(health, "status", None)
+    if status == "pass" or status == "pass":
+      break
+  except Exception:
+    print(f"Tentativa {attempt}/{max_retries}: InfluxDB indisponível em {url}, aguardando 2s...")
+    time.sleep(2)
+else:
+  raise SystemExit("Não foi possível conectar ao InfluxDB. Verifique o container Docker e as variáveis de ambiente.")
+
 query_api = client.query_api()
 
 print("=" * 60)
