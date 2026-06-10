@@ -61,10 +61,6 @@ for i in range(672):
     # Define o dia da semana atual dinamicamente
     dia_semana_atual = nomes_dias[tempo_atual.weekday()]
 
-    # Opcional: Pula a geração de dados nos fins de semana (sábado = 5, domingo = 6)
-    if tempo_atual.weekday() >= 5:
-        continue
-
     # Define se é almoço, jantar ou intervalo
     if 10 <= hora <= 14:
         refeicao = "almoco"
