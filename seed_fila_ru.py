@@ -7,7 +7,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 
 load_dotenv()
 
-# Configurações de conexão obtidas via .env (veja .env ou README)
+# Configurações de conexão obtidas via .env (veja .env.example ou README)
 token = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN", "TOKEN_DO_INFLUXDB")
 org = os.getenv("DOCKER_INFLUXDB_INIT_ORG", "ufpe")
 bucket = os.getenv("DOCKER_INFLUXDB_INIT_BUCKET", "ru_ufpe")
@@ -36,7 +36,6 @@ else:
 
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
-
 # Função auxiliar pra determinar o status da fila
 def obter_status_fila(qtd):
     if qtd <= 30:
@@ -48,14 +47,11 @@ def obter_status_fila(qtd):
     else:
         return "critica"
 
-
 # Mapeamento dos dias da semana (0 = segunda, 6 = domingo)
 nomes_dias = ["segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"]
 
-
 # Simulação de dados fictícios (Gerando registros de 15 em 15 minutos)
 data_inicio = datetime(2026, 6, 1, 10, 0, tzinfo=timezone.utc)  # 1º de Junho de 2026 (Segunda-feira)
-
 
 # Simula 1 semana inteira: 7 dias * 24 horas * 4 medições/hora = 672 medições
 for i in range(672):

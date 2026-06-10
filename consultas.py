@@ -6,7 +6,7 @@ from influxdb_client import InfluxDBClient
 
 load_dotenv()
 
-# Configurações via .env
+# Configurações de conexão obtidas via .env (veja .env.example ou README)
 token = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN", "TOKEN_DO_INFLUXDB")
 org = os.getenv("DOCKER_INFLUXDB_INIT_ORG", "ufpe")
 bucket = os.getenv("DOCKER_INFLUXDB_INIT_BUCKET", "ru_ufpe")
@@ -31,6 +31,7 @@ for attempt in range(1, max_retries + 1):
 else:
   raise SystemExit("Não foi possível conectar ao InfluxDB. Verifique o container Docker e as variáveis de ambiente.")
 
+# Instancia a API de consulta
 query_api = client.query_api()
 
 print("=" * 60)
@@ -109,7 +110,7 @@ for tabela in resultado_c:
         tempo_medio = round(registro.get_value(), 1)
         print(f" -> {tipo_refeicao}: {tempo_medio} minutos de espera em média")
 
-# NOVA CONSULTA 4: Média de pessoas por dia da semana (Aproveitando a tag dinâmica)
+# CONSULTA 4: Média de pessoas por dia da semana (Aproveitando a tag dinâmica)
 print("\n" + "-"*60)
 print("[Consulta 4] Movimentação Média por Dia da Semana:")
 
