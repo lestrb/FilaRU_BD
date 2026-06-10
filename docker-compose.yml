@@ -5,8 +5,8 @@ services:
     ports:
       - "8086:8086"
     volumes:
-      - influxdb2-data:/var/lib/influxdb2
-      - influxdb2-config:/etc/influxdb2
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
     env_file:
       - .env
     environment:
@@ -19,6 +19,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  influxdb2-data:
-  influxdb2-config:
+  influxdb-data:
+  influxdb-config:
   
